@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GEO Audit Studio</title>
+    <meta name="description" content="Generate a consultant-grade generative engine optimization audit prompt and measurement plan for any public website.">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#app" aria-label="GEO Audit Studio home">
+        <span class="brand-mark">G</span>
+        <span>
+          <strong>GEO Audit Studio</strong>
+          <small>Public prompt builder for serious AI visibility audits</small>
+        </span>
+      </a>
+      <nav class="top-actions" aria-label="Primary actions">
+        <a class="button secondary" href="prompt.html">Prompt reference</a>
+        <button class="button secondary" id="sampleButton" type="button">Use sample</button>
+        <button class="button secondary" id="copyButton" type="button">Copy current</button>
+        <button class="button primary" id="downloadButton" type="button">Download Markdown</button>
+      </nav>
+    </header>
+
+    <main id="app" class="app-shell">
+      <section class="intro" aria-labelledby="intro-title">
+        <div>
+          <h1 id="intro-title">Generate a rigorous GEO audit pack for any website.</h1>
+          <p>
+            This tool turns a website URL and owner context into a structured audit prompt,
+            scorecard, prompt-visibility test set, and P0-P3 action plan. It is static,
+            free to host, and ready to upload to <strong>wayan.com/geo-audit</strong>.
+          </p>
+        </div>
+        <div class="method-summary" aria-label="Method summary">
+          <span>Signal health</span>
+          <span>Output performance</span>
+          <span>Competitor citations</span>
+          <span>Measurement cadence</span>
+        </div>
+      </section>
+
+      <section class="workspace" aria-label="Audit builder workspace">
+        <form class="panel input-panel" id="auditForm">
+          <div class="panel-head">
+            <h2>Website Inputs</h2>
+            <button class="icon-button" id="clearButton" type="button" aria-label="Clear form">Clear</button>
+          </div>
+
+          <label>
+            Website URL
+            <input id="siteUrl" name="siteUrl" type="url" placeholder="https://example.org" autocomplete="url">
+          </label>
+
+          <label>
+            Brand or organization
+            <input id="brandName" name="brandName" type="text" placeholder="Example Foundation">
+          </label>
+
+          <label>
+            Primary audience
+            <input id="audience" name="audience" type="text" placeholder="CIOs at social impact organizations">
+          </label>
+
+          <label>
+            Primary action
+            <input id="primaryAction" name="primaryAction" type="text" placeholder="Contact sales, donate, subscribe, apply">
+          </label>
+
+          <label>
+            Category or market
+            <input id="category" name="category" type="text" placeholder="Digital public infrastructure consulting">
+          </label>
+
+          <label>
+            Geographic scope
+            <input id="geography" name="geography" type="text" placeholder="United States, global, East Africa">
+          </label>
+
+          <label>
+            High-value topics
+            <textarea id="topics" name="topics" rows="4" placeholder="AI adoption, funding, cybersecurity, health systems"></textarea>
+          </label>
+
+          <label>
+            High-risk topics
+            <textarea id="risks" name="risks" rows="4" placeholder="Impact claims, pricing, leadership, eligibility, current programs"></textarea>
+          </label>
+
+          <label>
+            Competitors or peer sites
+            <textarea id="competitors" name="competitors" rows="3" placeholder="competitor.org, peer.org, alternative.org"></textarea>
+          </label>
+
+          <label>
+            Known source-of-truth pages
+            <textarea id="sourcePages" name="sourcePages" rows="3" placeholder="About, leadership, pricing, programs, annual report, FAQ"></textarea>
+          </label>
+        </form>
+
+        <aside class="panel settings-panel" aria-labelledby="settings-title">
+          <div class="panel-head">
+            <h2 id="settings-title">Audit Settings</h2>
+          </div>
+
+          <fieldset>
+            <legend>Depth</legend>
+            <label class="radio-row">
+              <input type="radio" name="auditDepth" value="Quick" checked>
+              <span>Quick audit</span>
+            </label>
+            <label class="radio-row">
+              <input type="radio" name="auditDepth" value="Full">
+              <span>Full audit</span>
+            </label>
+          </fieldset>
+
+          <fieldset>
+            <legend>Include modules</legend>
+            <label class="check-row"><input type="checkbox" data-module="technical" checked> Technical access</label>
+            <label class="check-row"><input type="checkbox" data-module="citability" checked> Citability</label>
+            <label class="check-row"><input type="checkbox" data-module="entity" checked> Entity clarity</label>
+            <label class="check-row"><input type="checkbox" data-module="schema" checked> Structured data</label>
+            <label class="check-row"><input type="checkbox" data-module="mentions" checked> AI prompt visibility</label>
+            <label class="check-row"><input type="checkbox" data-module="competitors" checked> Competitor benchmark</label>
+            <label class="check-row"><input type="checkbox" data-module="measurement" checked> Measurement plan</label>
+          </fieldset>
+
+          <fieldset>
+            <legend>Owner self-check</legend>
+            <label class="check-row"><input type="checkbox" data-readiness="robots"> robots.txt is public</label>
+            <label class="check-row"><input type="checkbox" data-readiness="sitemap"> XML sitemap exists</label>
+            <label class="check-row"><input type="checkbox" data-readiness="about"> About page is current</label>
+            <label class="check-row"><input type="checkbox" data-readiness="schema"> Organization schema exists</label>
+            <label class="check-row"><input type="checkbox" data-readiness="faq"> Key pages answer questions directly</label>
+            <label class="check-row"><input type="checkbox" data-readiness="analytics"> AI referral tracking exists</label>
+          </fieldset>
+
+          <div class="readiness">
+            <div>
+              <span class="label">Readiness estimate</span>
+              <strong id="readinessScore">0%</strong>
+            </div>
+            <div class="meter" aria-hidden="true"><span id="readinessBar"></span></div>
+            <p id="readinessText">This is a self-check only. The generated audit prompt does the real evaluation.</p>
+          </div>
+        </aside>
+
+        <section class="panel output-panel" aria-labelledby="output-title">
+          <div class="panel-head output-head">
+            <h2 id="output-title">Generated Audit Pack</h2>
+            <span id="statusText" role="status">Ready</span>
+          </div>
+
+          <div class="tabs" role="tablist" aria-label="Generated outputs">
+            <button class="tab active" type="button" data-tab="prompt" role="tab" aria-selected="true">Prompt</button>
+            <button class="tab" type="button" data-tab="scorecard" role="tab" aria-selected="false">Scorecard</button>
+            <button class="tab" type="button" data-tab="measurement" role="tab" aria-selected="false">Measurement</button>
+            <button class="tab" type="button" data-tab="actions" role="tab" aria-selected="false">Actions</button>
+          </div>
+
+          <textarea id="output" spellcheck="false" aria-label="Generated output"></textarea>
+
+          <div class="output-footer">
+            <p>
+              Paste the prompt into a browsing AI tool. The best audit comes from live page retrieval,
+              cited evidence, and monthly prompt testing across multiple AI systems.
+            </p>
+            <button class="button secondary" id="downloadPromptButton" type="button">Download prompt only</button>
+          </div>
+        </section>
+      </section>
+
+      <section class="methodology" aria-labelledby="method-title">
+        <h2 id="method-title">Methodology built into the prompt</h2>
+        <div class="method-grid">
+          <article>
+            <h3>Crawl Access</h3>
+            <p>Checks robots.txt, sitemap discovery, AI crawler policy, HTTPS, redirects, noindex, canonical tags, and visible HTML.</p>
+          </article>
+          <article>
+            <h3>Citability</h3>
+            <p>Scores direct answers, definitions, FAQs, numbered structure, source links, author signals, and evidence quality.</p>
+          </article>
+          <article>
+            <h3>Entity Clarity</h3>
+            <p>Finds conflicting claims across pages, schema, social profiles, directories, and AI-generated brand summaries.</p>
+          </article>
+          <article>
+            <h3>AI Mentions</h3>
+            <p>Generates brand, category, evidence, risk, and competitor prompts for ChatGPT, Gemini, Perplexity, Claude, and Copilot.</p>
+          </article>
+          <article>
+            <h3>Competitor Benchmark</h3>
+            <p>Compares mention rate, citation rate, share of voice, cited URLs, content gaps, and source-page quality.</p>
+          </article>
+          <article>
+            <h3>Measurement</h3>
+            <p>Separates signal health from output performance, then defines monthly prompt checks and quarterly full audits.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

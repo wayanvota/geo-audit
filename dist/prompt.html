@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GEO Audit Prompt Reference</title>
+    <meta name="description" content="Standalone prompt reference for GEO Audit Studio.">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="GEO Audit Studio home">
+        <span class="brand-mark">G</span>
+        <span>
+          <strong>GEO Audit Studio</strong>
+          <small>Prompt reference</small>
+        </span>
+      </a>
+      <nav class="top-actions" aria-label="Primary actions">
+        <a class="button secondary" href="index.html">Build an audit</a>
+        <button class="button primary" id="copyPrompt" type="button">Copy prompt</button>
+      </nav>
+    </header>
+
+    <main class="prompt-page">
+      <h1>Standalone GEO audit prompt.</h1>
+      <p>
+        This is the full consultant-grade prompt used by the builder. Copy it directly
+        or use the main tool to personalize it for a specific website.
+      </p>
+      <div class="prompt-toolbar">
+        <a class="button secondary" href="prompts/generative-engine-optimization-audit-pro-prompt.md">Open Markdown file</a>
+      </div>
+      <pre class="prompt-frame" id="promptText">Loading prompt...</pre>
+    </main>
+
+    <script>
+      const promptText = document.querySelector("#promptText");
+      const copyPrompt = document.querySelector("#copyPrompt");
+
+      async function loadPrompt() {
+        try {
+          const response = await fetch("prompts/generative-engine-optimization-audit-pro-prompt.md");
+          if (!response.ok) throw new Error("Prompt unavailable");
+          promptText.textContent = await response.text();
+        } catch {
+          promptText.textContent = "Prompt file could not be loaded. Confirm prompts/generative-engine-optimization-audit-pro-prompt.md was uploaded with this page.";
+        }
+      }
+
+      copyPrompt.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(promptText.textContent);
+          copyPrompt.textContent = "Copied";
+          window.setTimeout(() => copyPrompt.textContent = "Copy prompt", 1400);
+        } catch {
+          const range = document.createRange();
+          range.selectNodeContents(promptText);
+          const selection = window.getSelection();
+          selection.removeAllRanges();
+          selection.addRange(range);
+          document.execCommand("copy");
+          selection.removeAllRanges();
+        }
+      });
+
+      loadPrompt();
+    </script>
+  </body>
+</html>
