@@ -18,8 +18,8 @@
         </span>
       </a>
       <nav class="top-actions" aria-label="Primary actions">
-        <a class="button secondary" href="index.html">Build an audit</a>
-        <button class="button primary" id="copyPrompt" type="button">Copy prompt</button>
+        <a class="button secondary" href="index.html" title="Return to the personalized audit builder.">Build an audit</a>
+        <button class="button primary" id="copyPrompt" type="button" title="Copy the standalone full audit prompt.">Copy prompt</button>
       </nav>
     </header>
 
@@ -30,7 +30,8 @@
         or use the main tool to personalize it for a specific website.
       </p>
       <div class="prompt-toolbar">
-        <a class="button secondary" href="prompts/generative-engine-optimization-audit-pro-prompt.md">Open Markdown file</a>
+        <button class="button primary" id="copyPromptInline" type="button" title="Copy the standalone full audit prompt shown below.">Copy prompt</button>
+        <a class="button secondary" href="prompts/generative-engine-optimization-audit-pro-prompt.md" title="Open the raw Markdown prompt file in the browser.">Open Markdown file</a>
       </div>
       <pre class="prompt-frame" id="promptText">Loading prompt...</pre>
     </main>
@@ -38,6 +39,7 @@
     <script>
       const promptText = document.querySelector("#promptText");
       const copyPrompt = document.querySelector("#copyPrompt");
+      const copyPromptInline = document.querySelector("#copyPromptInline");
 
       async function loadPrompt() {
         try {
@@ -49,11 +51,11 @@
         }
       }
 
-      copyPrompt.addEventListener("click", async () => {
+      async function copyStandalonePrompt(button) {
         try {
           await navigator.clipboard.writeText(promptText.textContent);
-          copyPrompt.textContent = "Copied";
-          window.setTimeout(() => copyPrompt.textContent = "Copy prompt", 1400);
+          button.textContent = "Copied";
+          window.setTimeout(() => button.textContent = "Copy prompt", 1400);
         } catch {
           const range = document.createRange();
           range.selectNodeContents(promptText);
@@ -63,7 +65,10 @@
           document.execCommand("copy");
           selection.removeAllRanges();
         }
-      });
+      }
+
+      copyPrompt.addEventListener("click", () => copyStandalonePrompt(copyPrompt));
+      copyPromptInline.addEventListener("click", () => copyStandalonePrompt(copyPromptInline));
 
       loadPrompt();
     </script>

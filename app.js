@@ -5,8 +5,10 @@ const readinessScore = document.querySelector("#readinessScore");
 const readinessBar = document.querySelector("#readinessBar");
 const readinessText = document.querySelector("#readinessText");
 const tabs = Array.from(document.querySelectorAll(".tab"));
+const outputLabel = document.querySelector("#outputLabel");
+const outputHelp = document.querySelector("#outputHelp");
 
-let activeTab = "prompt";
+let activeTab = "brief";
 let promptTemplate = "";
 
 const fields = [
@@ -35,7 +37,7 @@ const samples = {
   sourcePages: "About, Sponsored Posts, Guest Post Guidelines, Generative AI policy, Funding category, RSS feed",
 };
 
-const fallbackTemplate = `# GEO Audit Studio: Consultant-Grade Website Audit Prompt
+const fallbackTemplate = `# GEO Audit Studio: Consultant-Grade Website Audit Brief
 
 You are a skeptical GEO auditor, technical SEO analyst, and editorial strategist. Audit the target website for generative engine optimization.
 
@@ -62,12 +64,12 @@ Audit phases:
 4. Citability and answer readiness.
 5. Structured data and machine clues.
 6. E-E-A-T, authority, and reputation signals.
-7. AI output and prompt visibility tests.
+7. AI output and user-referenced retrieval tests.
 8. Competitor and peer benchmarking.
 9. Measurement and reporting plan.
 10. P0-P3 prioritized action plan.
 
-Required output: executive readout, scorecard, page inventory, findings by phase, claim contradiction table, AI prompt visibility table, P0-P3 action plan, 30-day implementation plan, measurement plan, and source appendix.`;
+Required output: executive readout, scorecard, page inventory, findings by phase, claim contradiction table, user-referenced retrieval test table, P0-P3 action plan, 30-day implementation plan, measurement plan, and source appendix.`;
 
 function getValue(id) {
   const el = document.querySelector(`#${id}`);
@@ -114,7 +116,7 @@ function moduleIntro() {
     citability: "Citability",
     entity: "Entity clarity",
     schema: "Structured data",
-    mentions: "AI prompt visibility",
+    mentions: "User-referenced retrieval",
     competitors: "Competitor benchmark",
     measurement: "Measurement plan",
   };
@@ -287,12 +289,34 @@ Week 4: Run the AI prompt set, compare competitors, capture baseline metrics, an
 
 function renderOutput() {
   const views = {
-    prompt: promptOutput,
+    brief: promptOutput,
     scorecard: scorecardOutput,
     measurement: measurementOutput,
     actions: actionsOutput,
   };
+  const labels = {
+    brief: {
+      title: "Full Audit Brief",
+      help: "Complete audit prompt to paste into a browsing AI tool."
+    },
+    scorecard: {
+      title: "Scorecard Module",
+      help: "Focused prompt module for scoring evidence after audit discovery."
+    },
+    measurement: {
+      title: "Measurement Module",
+      help: "Focused prompt module for recurring prompt tests, citation tracking, and AI referral measurement."
+    },
+    actions: {
+      title: "Action Plan Module",
+      help: "Focused prompt module for converting findings into P0-P3 fixes."
+    }
+  };
   output.value = views[activeTab]();
+  if (outputLabel && outputHelp) {
+    outputLabel.textContent = labels[activeTab].title;
+    outputHelp.textContent = labels[activeTab].help;
+  }
   statusText.textContent = "Ready";
 }
 
@@ -435,7 +459,7 @@ function downloadAll() {
 
 function downloadPromptOnly() {
   download(`${slug()}-geo-audit-prompt.md`, promptOutput());
-  statusText.textContent = "Prompt downloaded";
+  statusText.textContent = "Full brief downloaded";
 }
 
 function setupTabs() {
@@ -465,6 +489,7 @@ async function loadTemplate() {
 document.querySelector("#sampleButton").addEventListener("click", setSample);
 document.querySelector("#clearButton").addEventListener("click", clearForm);
 document.querySelector("#copyButton").addEventListener("click", copyCurrent);
+document.querySelector("#copyActiveButton").addEventListener("click", copyCurrent);
 document.querySelector("#downloadButton").addEventListener("click", downloadAll);
 document.querySelector("#downloadPromptButton").addEventListener("click", downloadPromptOnly);
 

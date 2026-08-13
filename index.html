@@ -18,10 +18,10 @@
         </span>
       </a>
       <nav class="top-actions" aria-label="Primary actions">
-        <a class="button secondary" href="prompt.html">Prompt reference</a>
-        <button class="button secondary" id="sampleButton" type="button">Use sample</button>
-        <button class="button secondary" id="copyButton" type="button">Copy current</button>
-        <button class="button primary" id="downloadButton" type="button">Download Markdown</button>
+        <a class="button secondary" href="prompt.html" title="Open the reusable full audit prompt in a separate reference page.">Full prompt reference</a>
+        <button class="button secondary" id="sampleButton" type="button" title="Fill the form with sample ICTworks audit inputs.">Use sample</button>
+        <button class="button secondary" id="copyButton" type="button" title="Copy the currently selected audit output.">Copy current</button>
+        <button class="button primary" id="downloadButton" type="button" title="Download the full prompt, scorecard, measurement plan, and action plan as one Markdown file.">Download Markdown</button>
       </nav>
     </header>
 
@@ -47,7 +47,7 @@
         <form class="panel input-panel" id="auditForm">
           <div class="panel-head">
             <h2>Website Inputs</h2>
-            <button class="icon-button" id="clearButton" type="button" aria-label="Clear form">Clear</button>
+            <button class="icon-button" id="clearButton" type="button" aria-label="Clear form" title="Clear all inputs and reset the audit builder.">Clear</button>
           </div>
 
           <label>
@@ -124,7 +124,7 @@
             <label class="check-row"><input type="checkbox" data-module="citability" checked> Citability</label>
             <label class="check-row"><input type="checkbox" data-module="entity" checked> Entity clarity</label>
             <label class="check-row"><input type="checkbox" data-module="schema" checked> Structured data</label>
-            <label class="check-row"><input type="checkbox" data-module="mentions" checked> AI prompt visibility</label>
+            <label class="check-row"><input type="checkbox" data-module="mentions" checked> User-referenced retrieval</label>
             <label class="check-row"><input type="checkbox" data-module="competitors" checked> Competitor benchmark</label>
             <label class="check-row"><input type="checkbox" data-module="measurement" checked> Measurement plan</label>
           </fieldset>
@@ -151,25 +151,32 @@
 
         <section class="panel output-panel" aria-labelledby="output-title">
           <div class="panel-head output-head">
-            <h2 id="output-title">Generated Audit Pack</h2>
+            <h2 id="output-title">Generated Prompt Modules</h2>
             <span id="statusText" role="status">Ready</span>
           </div>
 
           <div class="tabs" role="tablist" aria-label="Generated outputs">
-            <button class="tab active" type="button" data-tab="prompt" role="tab" aria-selected="true">Prompt</button>
-            <button class="tab" type="button" data-tab="scorecard" role="tab" aria-selected="false">Scorecard</button>
-            <button class="tab" type="button" data-tab="measurement" role="tab" aria-selected="false">Measurement</button>
-            <button class="tab" type="button" data-tab="actions" role="tab" aria-selected="false">Actions</button>
+            <button class="tab active" type="button" data-tab="brief" role="tab" aria-selected="true" title="Complete audit prompt to paste into a browsing AI tool.">Full Audit Brief</button>
+            <button class="tab" type="button" data-tab="scorecard" role="tab" aria-selected="false" title="Prompt module for scoring the audit evidence.">Scorecard Module</button>
+            <button class="tab" type="button" data-tab="measurement" role="tab" aria-selected="false" title="Prompt module for recurring AI visibility measurement.">Measurement Module</button>
+            <button class="tab" type="button" data-tab="actions" role="tab" aria-selected="false" title="Prompt module for turning findings into prioritized fixes.">Action Plan Module</button>
           </div>
 
-          <textarea id="output" spellcheck="false" aria-label="Generated output"></textarea>
+          <div class="output-toolbar" aria-label="Selected prompt controls">
+            <div>
+              <strong id="outputLabel">Full Audit Brief</strong>
+              <span id="outputHelp">Complete audit prompt to paste into a browsing AI tool.</span>
+            </div>
+            <button class="button primary" id="copyActiveButton" type="button" title="Copy the selected prompt module shown below.">Copy This Module</button>
+          </div>
+
+          <textarea id="output" spellcheck="false" aria-label="Generated prompt module"></textarea>
 
           <div class="output-footer">
             <p>
-              Paste the prompt into a browsing AI tool. The best audit comes from live page retrieval,
-              cited evidence, and monthly prompt testing across multiple AI systems.
+              These are all prompts. The first tab is the complete audit brief. The other tabs are narrower modules for scoring, measurement, and action planning.
             </p>
-            <button class="button secondary" id="downloadPromptButton" type="button">Download prompt only</button>
+            <button class="button secondary" id="downloadPromptButton" type="button" title="Download only the complete audit brief prompt.">Download full brief only</button>
           </div>
         </section>
       </section>
@@ -190,8 +197,8 @@
             <p>Finds conflicting claims across pages, schema, social profiles, directories, and AI-generated brand summaries.</p>
           </article>
           <article>
-            <h3>AI Mentions</h3>
-            <p>Generates brand, category, evidence, risk, and competitor prompts for ChatGPT, Gemini, Perplexity, Claude, and Copilot.</p>
+            <h3>User-Referenced Retrieval</h3>
+            <p>Tests what AI tools retrieve, cite, and get wrong when a user names the site or provides its URL.</p>
           </article>
           <article>
             <h3>Competitor Benchmark</h3>

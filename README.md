@@ -4,9 +4,9 @@ GEO Audit Studio is a static public tool that creates a consultant-grade generat
 
 The tool generates:
 
-- A browsing-AI audit prompt.
+- A full browsing-AI audit brief.
 - A weighted scorecard scaffold.
-- A monthly prompt-visibility measurement plan.
+- A monthly user-referenced retrieval measurement plan.
 - A P0-P3 action plan.
 - A downloadable Markdown audit pack.
 
