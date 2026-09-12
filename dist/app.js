@@ -104,9 +104,9 @@ function inputData() {
 }
 
 function replaceTokens(template, data) {
-  return Object.entries(data).reduce((text, [key, value]) => {
-    return text.replaceAll(`{{${key}}}`, value);
-  }, template);
+  return template.replace(/\{\{([A-Z_]+)\}\}/g, (token, key) => {
+    return Object.hasOwn(data, key) ? data[key] : token;
+  });
 }
 
 function moduleIntro() {

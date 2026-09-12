@@ -1,0 +1,17 @@
+{
+  "name": "geo-audit-studio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node --check app.js && node --check dist/app.js && node tests/check-static-parity.mjs",
+    "test:e2e": "playwright test",
+    "test:ci": "npm run check && npm run test:e2e"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0"
+  },
+  "engines": {
+    "node": ">=22.16.0"
+  }
+}
