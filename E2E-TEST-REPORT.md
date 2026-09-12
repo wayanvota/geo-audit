@@ -41,7 +41,9 @@ Local result: 20 of 20 categories passed in Chromium. JavaScript syntax,
 source-to-`dist` parity, and the dependency audit also passed with zero known
 vulnerabilities.
 
-GitHub Actions evidence will be linked here after the branch run completes.
+[GitHub Actions run 34668416379](https://github.com/wayanvota/geo-audit/actions/runs/34668416379)
+passed all 20 categories in Chromium, source-to-`dist` parity, and the dependency
+audit on Node 22.16.0.
 
 ## Defect fixed
 
