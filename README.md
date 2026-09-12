@@ -90,3 +90,21 @@ Suggested caveat:
 This is a static site. It can be deployed to GitHub Pages, Netlify, Cloudflare Pages, Vercel static hosting, or any normal web server.
 
 No build step is required.
+
+## End-to-end tests
+
+The release contract covers 10 user workflows and 10 adversarial cases through
+Chromium and a local static server. Tests use only reserved synthetic data. They
+do not browse a target site, call an AI provider, load an API key, or read
+private analytics.
+
+```bash
+npm ci
+npx playwright install chromium
+npm run test:ci
+npm audit --audit-level=high
+```
+
+See [`E2E-TEST-REPORT.md`](E2E-TEST-REPORT.md) for the category ledger, the
+defect found, and the rules for extending the harness. Keep the source files and
+their deployable `dist` copies in sync.
