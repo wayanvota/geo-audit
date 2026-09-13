@@ -36,7 +36,11 @@ Competitors or peer sites to compare against: `{{COMPETITORS}}`
 
 Known source-of-truth pages, if supplied: `{{SOURCE_PAGES}}`
 
+Audit preset: `{{AUDIT_PRESET}}`
+
 Audit depth: `{{AUDIT_DEPTH}}`
+
+Use the audit preset to prioritize the evaluation. For `Nonprofit`, focus on donor, supporter, journalist, partner, and board-facing visibility: mission, programs, donation routes, impact evidence, leadership, trust signals, and peer alternatives. For `Funder`, focus on grantseeker-facing accuracy: funding priorities, eligibility, exclusions, geography, grant size, deadlines, application route, past grantees, and false-fit risk. For `General`, run the standard public website audit.
 
 ## Source Rules
 

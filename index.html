@@ -18,6 +18,7 @@
         </span>
       </a>
       <nav class="top-actions" aria-label="Primary actions">
+        <a class="button secondary" href="about.html" title="Read who this tool is for and why it exists.">About</a>
         <a class="button secondary" href="prompt.html" title="Open the reusable full audit prompt in a separate reference page.">Full prompt reference</a>
         <button class="button secondary" id="sampleButton" type="button" title="Fill the form with sample ICTworks audit inputs.">Use sample</button>
         <button class="button secondary" id="copyButton" type="button" title="Copy the currently selected audit output.">Copy current</button>
@@ -31,7 +32,7 @@
           <h1 id="intro-title">Generate a rigorous GEO audit pack for any website.</h1>
           <p>
             This tool turns a website URL and owner context into a structured audit prompt,
-            scorecard, prompt-visibility test set, and P0-P3 action plan. It is static,
+            executive result, scorecard, retrieval test set, and P0-P3 action plan. It is static,
             free to host, and ready to upload to <strong>wayan.com/geo-audit</strong>.
           </p>
         </div>
@@ -48,6 +49,11 @@
           <div class="panel-head">
             <h2>Website Inputs</h2>
             <button class="icon-button" id="clearButton" type="button" aria-label="Clear form" title="Clear all inputs and reset the audit builder.">Clear</button>
+          </div>
+
+          <div class="preset-actions" aria-label="Audit presets">
+            <button class="button secondary" id="nonprofitPresetButton" type="button" title="Load a donor-facing nonprofit AI visibility audit setup.">Nonprofit preset</button>
+            <button class="button secondary" id="funderPresetButton" type="button" title="Load a funder-facing AI accuracy audit setup for grantseekers.">Funder preset</button>
           </div>
 
           <label>
@@ -107,6 +113,22 @@
           </div>
 
           <fieldset>
+            <legend>Audit preset</legend>
+            <label class="radio-row">
+              <input type="radio" name="auditPreset" value="Nonprofit" checked>
+              <span>Nonprofit visibility</span>
+            </label>
+            <label class="radio-row">
+              <input type="radio" name="auditPreset" value="Funder">
+              <span>Funder accuracy</span>
+            </label>
+            <label class="radio-row">
+              <input type="radio" name="auditPreset" value="General">
+              <span>General website</span>
+            </label>
+          </fieldset>
+
+          <fieldset>
             <legend>Depth</legend>
             <label class="radio-row">
               <input type="radio" name="auditDepth" value="Quick" checked>
@@ -157,6 +179,7 @@
 
           <div class="tabs" role="tablist" aria-label="Generated outputs">
             <button class="tab active" type="button" data-tab="brief" role="tab" aria-selected="true" title="Complete audit prompt to paste into a browsing AI tool.">Full Audit Brief</button>
+            <button class="tab" type="button" data-tab="executive" role="tab" aria-selected="false" title="One-screen executive result prompt for a board, CEO, development lead, or program team.">Executive Result</button>
             <button class="tab" type="button" data-tab="scorecard" role="tab" aria-selected="false" title="Prompt module for scoring the audit evidence.">Scorecard Module</button>
             <button class="tab" type="button" data-tab="measurement" role="tab" aria-selected="false" title="Prompt module for recurring AI visibility measurement.">Measurement Module</button>
             <button class="tab" type="button" data-tab="actions" role="tab" aria-selected="false" title="Prompt module for turning findings into prioritized fixes.">Action Plan Module</button>
@@ -174,7 +197,7 @@
 
           <div class="output-footer">
             <p>
-              These are all prompts. The first tab is the complete audit brief. The other tabs are narrower modules for scoring, measurement, and action planning.
+              These are all prompts. The first tab is the complete audit brief. Executive Result creates a one-screen readout. The other tabs are narrower modules for scoring, measurement, and action planning.
             </p>
             <button class="button secondary" id="downloadPromptButton" type="button" title="Download only the complete audit brief prompt.">Download full brief only</button>
           </div>
