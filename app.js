@@ -37,6 +37,33 @@ const samples = {
   sourcePages: "About, Sponsored Posts, Guest Post Guidelines, Generative AI policy, Funding category, RSS feed",
 };
 
+const presetSamples = {
+  nonprofit: {
+    siteUrl: "",
+    brandName: "",
+    audience: "Donors, supporters, journalists, volunteers, partners, and nonprofit staff",
+    primaryAction: "Donate, volunteer, subscribe, contact the development team, or learn about programs",
+    category: "Nonprofit organization in a specific cause area",
+    geography: "Primary service area and donor market",
+    topics: "Mission, programs, impact evidence, donation options, volunteer opportunities, current campaigns",
+    risks: "Incorrect mission summary, stale program descriptions, unsupported impact claims, wrong donation route, outdated leadership, peer organizations recommended instead",
+    competitors: "Peer nonprofits, local alternatives, national organizations in the same cause area",
+    sourcePages: "About, programs, impact or annual report, leadership, donate, FAQ, financials, ratings profiles, press facts",
+  },
+  funder: {
+    siteUrl: "",
+    brandName: "",
+    audience: "Grantseekers, nonprofit executives, program staff, philanthropy advisors, and foundation staff",
+    primaryAction: "Assess fit, review eligibility, understand funding priorities, and decide whether to apply",
+    category: "Foundation, grantmaker, donor-advised fund sponsor, or philanthropic intermediary",
+    geography: "Funding geography and applicant geography",
+    topics: "Funding priorities, eligibility, exclusions, grant sizes, application process, deadlines, past grantees, program officers",
+    risks: "AI assistants overstating openness, misstating funding priorities, missing exclusions, inventing deadlines, citing old grant cycles, sending ineligible applicants to staff",
+    competitors: "Peer funders, regional foundations, public grant programs, issue-area funders",
+    sourcePages: "Funding priorities, eligibility, exclusions, how to apply, grants database, annual report, IRS Form 990, staff, FAQ, news",
+  },
+};
+
 const fallbackTemplate = `# GEO Audit Studio: Consultant-Grade Website Audit Brief
 
 You are a skeptical GEO auditor, technical SEO analyst, and editorial strategist. Audit the target website for generative engine optimization.
@@ -53,6 +80,7 @@ High-value topics: {{TOPICS}}
 High-risk topics: {{RISKS}}
 Competitors or peer sites: {{COMPETITORS}}
 Known source-of-truth pages: {{SOURCE_PAGES}}
+Audit preset: {{AUDIT_PRESET}}
 Audit depth: {{AUDIT_DEPTH}}
 
 Use live sources when browsing is available. Cite every substantive factual claim with a working markdown link or mark it as [SOURCE NEEDED].
@@ -81,6 +109,11 @@ function getAuditDepth() {
   return selected ? selected.value : "Quick";
 }
 
+function getAuditPreset() {
+  const selected = document.querySelector('input[name="auditPreset"]:checked');
+  return selected ? selected.value : "Nonprofit";
+}
+
 function getSelectedModules() {
   return Array.from(document.querySelectorAll("[data-module]"))
     .filter((input) => input.checked)
@@ -100,6 +133,7 @@ function inputData() {
     COMPETITORS: getValue("competitors") || "[COMPETITORS OR PEERS]",
     SOURCE_PAGES: getValue("sourcePages") || "[SOURCE-OF-TRUTH PAGES]",
     AUDIT_DEPTH: getAuditDepth(),
+    AUDIT_PRESET: getAuditPreset(),
   };
 }
 
@@ -122,6 +156,10 @@ function moduleIntro() {
   };
 
   return [
+    `## Audit Preset: ${getAuditPreset()}`,
+    "",
+    presetInstruction(),
+    "",
     "## Selected Modules",
     "",
     modules.length
@@ -131,6 +169,17 @@ function moduleIntro() {
     "If a selected module cannot be tested because tool access or private data is missing, mark it as not tested and exclude it from the overall score instead of scoring it zero.",
     "",
   ].join("\n");
+}
+
+function presetInstruction() {
+  const preset = getAuditPreset();
+  if (preset === "Funder") {
+    return "Treat this as a funder accuracy audit. Test whether AI assistants accurately describe funding priorities, eligibility, exclusions, geography, application routes, deadlines, grant size, past grantees, and fit to grantseekers. Prioritize false-fit risk, applicant burden, staff time, and public trust.";
+  }
+  if (preset === "General") {
+    return "Treat this as a general public website audit. Test whether AI assistants can identify the organization, retrieve current source-of-truth pages, cite accurate facts, and avoid stale or unsupported summaries.";
+  }
+  return "Treat this as a nonprofit visibility audit. Test whether AI assistants accurately describe the organization to donors, supporters, journalists, partners, and staff. Prioritize mission clarity, program facts, donation routes, impact evidence, peer comparisons, and reputational risk.";
 }
 
 function promptOutput() {
@@ -234,6 +283,45 @@ Re-run the audit after redesigns, CMS migrations, robots.txt edits, sitemap chan
 `;
 }
 
+function executiveOutput() {
+  const data = inputData();
+  return `# One-Screen GEO Executive Result
+
+Target: ${data.SITE_URL}
+Brand: ${data.BRAND_NAME}
+Preset: ${data.AUDIT_PRESET}
+Audience: ${data.AUDIENCE}
+
+Use this prompt when the reader needs a board-ready or CEO-ready result on one screen.
+
+Audit ${data.SITE_URL} for generative engine optimization, using the ${data.AUDIT_PRESET} preset.
+
+${presetInstruction()}
+
+Return only the following sections:
+
+## Bottom Line
+One direct paragraph. State whether AI assistants can find, understand, cite, and accurately represent this website today. Include the most material risk and the highest-leverage fix.
+
+## Score
+Give a 0 to 100 GEO score and one sentence explaining the score. If important tests were not possible, say which ones were not tested.
+
+## What AI Gets Right
+List up to 3 facts or themes AI tools are likely to represent accurately, with source URLs.
+
+## What AI Gets Wrong or Misses
+List up to 5 material errors, omissions, stale facts, unsupported claims, or competitor substitutions. For each one, include the prompt that exposed it and the source URL that should correct it.
+
+## Fix First
+Give the 5 highest-priority fixes in order. Label each as content, technical, reputation, or measurement.
+
+## Decision Needed
+Name the one decision the site owner has to make before the next audit cycle.
+
+Evidence rules:
+Use live web retrieval when available. Link every substantive factual claim. Mark unverified facts as [SOURCE NEEDED]. Do not infer performance from vendor claims or self-reported impact metrics without naming the source.`;
+}
+
 function actionsOutput() {
   const data = inputData();
   return `# P0-P3 GEO Action Plan
@@ -290,6 +378,7 @@ Week 4: Run the AI prompt set, compare competitors, capture baseline metrics, an
 function renderOutput() {
   const views = {
     brief: promptOutput,
+    executive: executiveOutput,
     scorecard: scorecardOutput,
     measurement: measurementOutput,
     actions: actionsOutput,
@@ -302,6 +391,10 @@ function renderOutput() {
     scorecard: {
       title: "Scorecard Module",
       help: "Focused prompt module for scoring evidence after audit discovery."
+    },
+    executive: {
+      title: "Executive Result",
+      help: "One-screen prompt for a board-ready or CEO-ready GEO readout."
     },
     measurement: {
       title: "Measurement Module",
@@ -341,6 +434,7 @@ function saveState() {
     state[id] = getValue(id);
   });
   state.auditDepth = getAuditDepth();
+  state.auditPreset = getAuditPreset();
   state.modules = getSelectedModules();
   state.readiness = Array.from(document.querySelectorAll("[data-readiness]"))
     .filter((input) => input.checked)
@@ -361,6 +455,10 @@ function loadState() {
       const depth = document.querySelector(`input[name="auditDepth"][value="${state.auditDepth}"]`);
       if (depth) depth.checked = true;
     }
+    if (state.auditPreset) {
+      const preset = document.querySelector(`input[name="auditPreset"][value="${state.auditPreset}"]`);
+      if (preset) preset.checked = true;
+    }
     if (Array.isArray(state.modules)) {
       document.querySelectorAll("[data-module]").forEach((input) => {
         input.checked = state.modules.includes(input.dataset.module);
@@ -376,12 +474,28 @@ function loadState() {
   }
 }
 
+function loadPreset(name) {
+  const values = presetSamples[name];
+  if (!values) return;
+  Object.entries(values).forEach(([id, value]) => {
+    const el = document.querySelector(`#${id}`);
+    if (el && value) el.value = value;
+  });
+  const presetValue = name === "funder" ? "Funder" : "Nonprofit";
+  const presetInput = document.querySelector(`input[name="auditPreset"][value="${presetValue}"]`);
+  if (presetInput) presetInput.checked = true;
+  const full = document.querySelector('input[name="auditDepth"][value="Full"]');
+  if (full) full.checked = true;
+  updateAll(`${presetValue} preset loaded`);
+}
+
 function setSample() {
   Object.entries(samples).forEach(([id, value]) => {
     const el = document.querySelector(`#${id}`);
     if (el) el.value = value;
   });
   document.querySelector('input[name="auditDepth"][value="Full"]').checked = true;
+  document.querySelector('input[name="auditPreset"][value="Nonprofit"]').checked = true;
   document.querySelectorAll("[data-module]").forEach((input) => {
     input.checked = true;
   });
@@ -398,6 +512,7 @@ function clearForm() {
     if (el) el.value = "";
   });
   document.querySelector('input[name="auditDepth"][value="Quick"]').checked = true;
+  document.querySelector('input[name="auditPreset"][value="Nonprofit"]').checked = true;
   document.querySelectorAll("[data-module]").forEach((input) => {
     input.checked = true;
   });
@@ -447,6 +562,8 @@ function downloadAll() {
   const text = [
     promptOutput(),
     "\n\n---\n\n",
+    executiveOutput(),
+    "\n\n---\n\n",
     scorecardOutput(),
     "\n\n---\n\n",
     measurementOutput(),
@@ -487,6 +604,8 @@ async function loadTemplate() {
 }
 
 document.querySelector("#sampleButton").addEventListener("click", setSample);
+document.querySelector("#nonprofitPresetButton").addEventListener("click", () => loadPreset("nonprofit"));
+document.querySelector("#funderPresetButton").addEventListener("click", () => loadPreset("funder"));
 document.querySelector("#clearButton").addEventListener("click", clearForm);
 document.querySelector("#copyButton").addEventListener("click", copyCurrent);
 document.querySelector("#copyActiveButton").addEventListener("click", copyCurrent);

@@ -5,6 +5,8 @@ GEO Audit Studio is a static public tool that creates a consultant-grade generat
 The tool generates:
 
 - A full browsing-AI audit brief.
+- Nonprofit and funder audit presets.
+- A one-screen executive result mode.
 - A weighted scorecard scaffold.
 - A monthly user-referenced retrieval measurement plan.
 - A P0-P3 action plan.
@@ -53,6 +55,7 @@ From the `g-shevchenko/geo-audit` repo:
 ## Files
 
 - `index.html`: static app shell.
+- `about.html`: plain-language description of nonprofit and funder use cases.
 - `styles.css`: visual system and responsive layout.
 - `app.js`: prompt generator, tabs, copy, download, sample data, readiness self-check.
 - `prompts/generative-engine-optimization-audit-pro-prompt.md`: standalone expert prompt.
